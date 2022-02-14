@@ -15,7 +15,9 @@ router.post("/users", async (req, res) => {
 
   try {
     const usersRaw = (
-      await axios.get(`https://randomuser.me/api/?results=25&page=1${urlNat}`)
+      await axios.get(
+        `https://randomuser.me/api/?results=25&page=${req.body.pageNum}${urlNat}`
+      )
     ).data.results;
 
     const users = usersRaw.map((user) => {
@@ -26,12 +28,17 @@ router.post("/users", async (req, res) => {
         nameLast: user?.name.last,
         email: user?.email,
         country: user?.location.country,
+        coords: [
+          user?.location.coordinates.longitude,
+          user?.location.coordinates.latitude,
+        ],
         city: user?.location.city,
         streetName: user?.location.street.name,
         streetNumber: user?.location.street.number,
         isFav: false,
       };
     });
+    console.log("users: ", users);
 
     res.send(users);
   } catch (err) {
