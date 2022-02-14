@@ -29,8 +29,8 @@ router.post("/users", async (req, res) => {
         email: user?.email,
         country: user?.location.country,
         coords: [
-          user?.location.coordinates.longitude,
-          user?.location.coordinates.latitude,
+          Number(user?.location.coordinates.longitude),
+          Number(user?.location.coordinates.latitude),
         ],
         city: user?.location.city,
         streetName: user?.location.street.name,
