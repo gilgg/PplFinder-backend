@@ -74,4 +74,22 @@ router.delete("/users/favorites/:id", async (req, res) => {
   }
 });
 
+router.get("/users/coords/:location", async (req, res) => {
+  console.log("in location path: ", req.params.location);
+  const coordsRaw = (
+    await axios.get(
+      `https://www.mapquestapi.com/geocoding/v1/address?key=${process.env.MAP_QUEST_API_KEY}&location=${req.params.location}`
+    )
+  ).data.results.locations.latLng;
+  console.log("coordsRaw: ", coordsRaw);
+  const coords = [coordsRaw.lng, coordsRaw.lat];
+  console.log("coords: ", coords);
+
+  try {
+    res.send(coords);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
 module.exports = router;
