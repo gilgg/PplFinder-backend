@@ -38,7 +38,6 @@ router.post("/users", async (req, res) => {
         isFav: false,
       };
     });
-    console.log("users: ", users);
 
     res.send(users);
   } catch (err) {
@@ -47,15 +46,10 @@ router.post("/users", async (req, res) => {
 });
 
 router.get("/users/coords/:location", async (req, res) => {
-  console.log("in location path: ", req.params.location);
   const coordsRaw = (
-    await axios.get(
-      `https://www.mapquestapi.com/geocoding/v1/address?key=${process.env.MAP_QUEST_API_KEY}&location=${req.params.location}`
-    )
-  ).data.results.locations.latLng;
-  console.log("coordsRaw: ", coordsRaw);
+    await axios.get(`https://www.mapquestapi.com/geocoding/v1/address?key=${process.env.MAP_QUEST_API_KEY}&location=${req.params.location.replace(" ", "")}`)
+  ).data.results[0].locations[0].latLng;
   const coords = [coordsRaw.lng, coordsRaw.lat];
-  console.log("coords: ", coords);
 
   try {
     res.send(coords);
